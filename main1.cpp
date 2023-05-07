@@ -1,97 +1,119 @@
 //lab0
 #include <iostream>
 #include <fstream>
-#include <vector>
 #include <string>
+#include <cstdlib>
+#include <ctime>
 
 using namespace std;
 
 class Student {
+private:
+    string first_name;
+    string last_name;
+    string faculty;
+    int birth_year;
+    int enrollment_year;
+    string id;
+
 public:
-   
-    Student() {
-        name = "";
-        surname = "";
-        age = 0;
-        avg_grade = 0.0;
-        student_id = "";
-    }
+    // Конструкторы
+    Student() : birth_year(0), enrollment_year(0) {}
+    Student(string first_name, string last_name, string faculty, int birth_year, int enrollment_year, string id) :
+        first_name(first_name), last_name(last_name), faculty(faculty), birth_year(birth_year), enrollment_year(enrollment_year), id(id) {}
+    Student(const Student& other) :
+        first_name(other.first_name), last_name(other.last_name), faculty(other.faculty),
+        birth_year(other.birth_year), enrollment_year(other.enrollment_year), id(other.id) {}
 
-    Student(const string& n, const string& s, int a, double g, const string& id) {
-        name = n;
-        surname = s;
-        age = a;
-        avg_grade = g;
-        student_id = id;
+    // Методы
+    bool operator==(const Student& other) const {
+        return id == other.id;
     }
-
-    Student(const Student& other) {
-        name = other.name;
-        surname = other.surname;
-        age = other.age;
-        avg_grade = other.avg_grade;
-        student_id = other.student_id;
-    }
-
-    // Операторы
     Student& operator=(const Student& other) {
-        name = other.name;
-        surname = other.surname;
-        age = other.age;
-        avg_grade = other.avg_grade;
-        student_id = other.student_id;
+        first_name = other.first_name;
+        last_name = other.last_name;
+        faculty = other.faculty;
+        birth_year = other.birth_year;
+        enrollment_year = other.enrollment_year;
+        id = other.id;
         return *this;
     }
-
-    bool operator==(const Student& other) const {
-        return student_id == other.student_id;
+    Student* clone() const {
+        return new Student(*this);
     }
-
-    // Методы чтения/записи из потока
     friend istream& operator>>(istream& is, Student& s) {
-        is >> s.name >> s.surname >> s.age >> s.avg_grade >> s.student_id;
+        is >> s.first_name >> s.last_name >> s.faculty >> s.birth_year >> s.enrollment_year >> s.id;
         return is;
     }
-
     friend ostream& operator<<(ostream& os, const Student& s) {
-        os << s.name << " " << s.surname << " " << s.age << " " << s.avg_grade << " " << s.student_id;
+        os << s.first_name << " " << s.last_name << " " << s.faculty << " " << s.birth_year << " " << s.enrollment_year << " " << s.id;
         return os;
     }
-
-private:
-    string name;
-    string surname;
-    int age;
-    double avg_grade;
-    string student_id;
 };
 
 int main() {
-   
-    ofstream outfile("students.txt");
-    for (int i = 0; i < 50; i++) {
-        string name = "Name" + to_string(i+1);
-        string surname = "Surname" + to_string(i+1);
-        int age = 18 + rand() % 10;
-        double avg_grade = 3.0 + static_cast <double> (rand()) /( static_cast <double> (RAND_MAX/(5.0-3.0)));
-        string student_id = "ID" + to_string(rand() % 10000 + 10000);
-        outfile << Student(name, surname, age, avg_grade, student_id) << endl;
-    }
-    outfile.close();
+    const int SIZE = 50;
+    srand(time(0)); // Инициализация генер
+    string first_names[10] = {"Emma", "Olivia", "Ava", "Isabella", "Sophia", "Mia", "Charlotte", "Amelia", "Harper", "Evelyn"};
+string last_names[10] = {"Smith", "Johnson", "Williams", "Brown", "Jones", "Miller", "Davis", "Garcia", "Wilson", "Anderson"};
 
-   
-    ifstream infile("students.txt");
-    vector<Student> students;
-    Student s;
-    while (infile >> s) {
-        students.push_back(s);
-    }
-    infile.close();
+ofstream fout("students.txt");
+if (!fout) {
+    cerr << "Error opening file\n";
+    return 1;
+}
 
-    
-    for (const auto& student : students) {
-        cout << student << endl;
-    }
+for (int i = 0; i < SIZE; i++) {
+    string first_name = first_names[rand() % 10];
+    string last_name = last_names[rand() % 10];
+    string faculty = "Faculty" + to_string((rand() % 3) + 1);
+    int birth_year = (rand() % 10) + 1990;
+    int enrollment_year = (rand() % 5) + 2015;
+    string id = "ID" + to_string(i+1);
+
+    fout << first_name << " "<<last_name << " " << faculty << " " << birth_year << " " << enrollment_year << " " << id << endl;
+
+string first_names[10] = {"Emma", "Olivia", "Ava", "Isabella", "Sophia", "Mia", "Charlotte", "Amelia", "Harper", "Evelyn"};
+string last_names[10] = {"Smith", "Johnson", "Williams", "Brown", "Jones", "Miller", "Davis", "Garcia", "Wilson", "Anderson"};
+
+ofstream fout("students.txt");
+if (!fout) {
+    cerr << "Error opening file\n";
+    return 1;
+}
+
+for (int i = 0; i < SIZE; i++) {
+    string first_name = first_names[rand() % 10];
+    string last_name = last_names[rand() % 10];
+    string faculty = "Faculty" + to_string((rand() % 3) + 1);
+    int birth_year = (rand() % 10) + 1990;
+    int enrollment_year = (rand() % 5) + 2015;
+    string id = "ID" + to_string(i+1);
+
+    fout << first_name << " "<<last_name << " " << faculty << " " << birth_year << " " << enrollment_year << " " << id << endl;
+}
+fout.close();
+
+ifstream fin("students.txt");
+if (!fin) {
+cerr << "Error opening file\n";
+return 1;
+}
+
+Student arr[SIZE];
+for (int i = 0; i < SIZE; i++) {
+fin >> arr[i];
+}
+fin.close();
+
+for (int i = 0; i < SIZE; i++) {
+cout << arr[i] << endl;
+}
+
+return 0;
+}
+
+}
 
     return 0;
 }
