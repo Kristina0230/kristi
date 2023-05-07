@@ -1,4 +1,6 @@
-//lab3 динамические структуры
+<details>
+<summary>lab3 динамические структуры</summary>
+
 #include <iostream>
 #include <fstream>
 #include <stack>
@@ -119,3 +121,5 @@ print_student(students.top());
 
 return 0;
 }
+</details>
+
