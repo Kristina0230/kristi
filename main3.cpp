@@ -1,4 +1,4 @@
-//lab3
+//lab3 динамические структуры
 #include <iostream>
 #include <fstream>
 #include <stack>
