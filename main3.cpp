@@ -1,5 +1,4 @@
-<details>
-<summary>lab3 динамические структуры</summary>
+//lab3 динамические структуры
 
 #include <iostream>
 #include <fstream>
@@ -121,5 +120,5 @@ print_student(students.top());
 
 return 0;
 }
-</details>
+
 
